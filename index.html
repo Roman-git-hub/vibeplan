@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>VibePlan by Roman</title>
+<title>VibePlan by Roman — Sync Edition</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,12 +14,14 @@
       <button id="btnNew" class="btn">Добавить идею</button>
       <button id="btnExport" class="btn ghost">Экспорт в TXT</button>
       <button id="btnSettings" class="btn ghost">Настройки</button>
+      <button id="btnSync" class="btn accent">Синхронизировать сейчас</button>
       <button id="btnLogout" class="btn ghost">Выйти</button>
     </div>
   </header>
 
   <main>
     <section class="week" id="weekGrid"></section>
+    <div id="syncStatus" class="sync-status small">Статус: не синхронизировано</div>
   </main>
 
   <footer class="footer">
@@ -52,12 +54,12 @@
     <label>GitHub репозиторий</label>
     <input id="ghRepo" type="text" placeholder="vibeplan (repo name)" />
     <label>Путь файла (в репозитории)</label>
-    <input id="ghPath" type="text" value="ideas.json" />
-    <label>Персональный токен (PAT) — вставьте здесь</label>
+    <input id="ghPath" type="text" value="data.json" />
+    <label>Персональный токен (PAT) — вставьте сюда <strong>только вы</strong></label>
     <input id="ghToken" type="password" placeholder="ghp_..." />
     <div class="modal-actions">
       <button id="saveSettings" class="btn">Сохранить</button>
-      <button id="syncBtn" class="btn ghost">Синхронизировать сейчас</button>
+      <button id="testConn" class="btn ghost">Проверить соединение</button>
       <button id="closeSettings" class="btn ghost">Закрыть</button>
     </div>
     <div class="hint small">Токен нужен только для записи в ваш репозиторий. Инструкция в README.</div>
