@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "generated": "2025-10-25T14:27:22.143Z"
+  },
+  "items": [
+    {
+      "day": "Пн",
+      "category": "Животные",
+      "title": "Cute dog tshirt",
+      "es": "Mi perro es mi familia — diseño divertido con huella",
+      "en": "My dog is my family — cute paw design",
+      "platforms": {
+        "tiktok": true,
+        "instagram": true,
+        "redbubble": true
+      },
+      "published": false
+    }
+  ]
+}
