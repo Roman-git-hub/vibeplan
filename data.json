@@ -67,6 +67,19 @@
         "redbubble": true
       },
       "published": false
+    },
+    {
+      "day": "Вт",
+      "category": "Тренды",
+      "title": "Без названия",
+      "es": "",
+      "en": "",
+      "platforms": {
+        "tiktok": true,
+        "instagram": false,
+        "redbubble": false
+      },
+      "published": false
     }
   ]
 }
