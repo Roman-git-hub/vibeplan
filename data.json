@@ -11,7 +11,7 @@
       "en": "My dog is my family — cute paw design",
       "platforms": {
         "tiktok": false,
-        "instagram": false,
+        "instagram": true,
         "redbubble": true
       },
       "published": false
