@@ -5,8 +5,8 @@ body{margin:0;background:var(--bg);color:var(--text)}
 .header{display:flex;justify-content:space-between;align-items:center}
 .controls{display:flex;gap:8px}
 .btn{background:var(--accent);color:#042027;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700}
-.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--text);font-weight:600}
-.btn.accent{background:#0ea5a5}
+.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.08);color:var(--text);font-weight:600}
+.btn.accent{background:#0ea5a5;color:#022}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-top:16px}
 .card{background:#fff;padding:10px;border-radius:10px;box-shadow:0 2px 8px rgba(2,6,23,0.04)}
 .small{font-size:13px;color:var(--muted)}
