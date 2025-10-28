@@ -1,1 +1,3 @@
-VibePlan online strict build\nRepo: Roman-git-hub/vibeplan\nNo localStorage for state. Token is used only in memory. Committer: Roman-git-hub <Roman_Web@outlook.com>\nGenerated: 2025-10-28T19:12:29.645330Z\n\nInstructions:\n1) Upload files to your repo (replace existing). 2) Open site. 3) Click Settings, paste your PAT, press Подключить. 4) Edits will be pushed automatically.\n
+VibePlan stable build
+Generated: 2025-10-28T21:20:58.705316Z
+Instructions: unzip, upload to GitHub Pages, open site, Settings -> fill owner/repo/token -> Save -> click Sync.
