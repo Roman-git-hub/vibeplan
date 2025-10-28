@@ -1,91 +1,64 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>VibePlan by Roman — Final</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VibePlan — Online</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="app" class="container">
+<div class="container">
   <header class="header">
-    <h1>VibePlan <span class="sub">by Roman</span></h1>
+    <h1>VibePlan</h1>
     <div class="controls">
-      <button id="btnNew" class="btn">Добавить идею</button>
-      <button id="btnExport" class="btn ghost">Экспорт в TXT</button>
+      <button id="btnNew" class="btn">Добавить</button>
+      <button id="btnExport" class="btn ghost">Экспорт</button>
       <button id="btnSettings" class="btn ghost">Настройки</button>
-      <button id="btnSync" class="btn accent">Синхронизировать</button>
-      <button id="btnLogout" class="btn ghost">Выйти</button>
+      <button id="btnForceSync" class="btn accent">Синхронизировать</button>
     </div>
   </header>
 
   <main>
-    <section class="week" id="weekGrid"></section>
-    <div id="syncStatus" class="sync-status small">Статус: не синхронизировано</div>
+    <section id="weekGrid" class="week"></section>
+    <div id="syncStatus" class="sync-status">Статус: не подключено</div>
   </main>
 
-  <footer class="footer">
-    <div>VibePlan — универсальный планировщик контента</div>
-    <div class="small">Управление — на русском. Идеи — на испанском и английском.</div>
-  </footer>
+  <footer class="footer small">Интерфейс — русский. Данные хранятся ТОЛЬКО в GitHub (data.json).</footer>
 </div>
 
-<!-- Login Modal (shows only if not already logged in) -->
-<div id="loginModal" class="modal">
+<!-- Settings modal -->
+<div id="settingsModal" class="modal" aria-hidden="true">
   <div class="modal-card">
-    <h2>Вход в VibePlan</h2>
-    <label>Логин</label>
-    <input id="loginUser" type="text" value="Roman" />
-    <label>Пароль</label>
-    <input id="loginPass" type="password" value="" />
+    <h3>Настройки GitHub</h3>
+    <label>Owner (username)</label>
+    <input id="inpOwner" type="text" value="Roman-git-hub" />
+    <label>Repo</label>
+    <input id="inpRepo" type="text" value="vibeplan" />
+    <label>File path</label>
+    <input id="inpPath" type="text" value="data.json" />
+    <label>Personal Access Token (PAT)</label>
+    <input id="inpToken" type="password" placeholder="вставьте токен (ghp_...)" />
     <div class="modal-actions">
-      <label style="margin-right:auto"><input type="checkbox" id="rememberMe"/> Запомнить вход</label>
-      <button id="loginBtn" class="btn">Войти</button>
-    </div>
-    <div class="hint small">При первом входе используйте логин <strong>Roman</strong> и пароль <strong>12345678</strong>.</div>
-  </div>
-</div>
-
-<!-- Settings Modal (owner/repo/path/token) -->
-<div id="settingsModal" class="modal">
-  <div class="modal-card">
-    <h3>Настройки синхронизации (GitHub)</h3>
-    <label>GitHub пользователь (owner)</label>
-    <input id="ghOwner" type="text" placeholder="ваш GitHub username" />
-    <label>GitHub репозиторий</label>
-    <input id="ghRepo" type="text" placeholder="vibeplan (repo name)" />
-    <label>Путь файла (в репозитории)</label>
-    <input id="ghPath" type="text" value="data.json" />
-    <label>Персональный токен (PAT) — вставьте сюда (хранится локально)</label>
-    <input id="ghToken" type="password" placeholder="ghp_..." />
-    <div class="modal-actions">
-      <button id="saveSettings" class="btn">Сохранить</button>
-      <button id="testConn" class="btn ghost">Проверить соединение</button>
-      <button id="loadRemote" class="btn ghost">Загрузить с GitHub</button>
+      <button id="saveSettings" class="btn">Подключить</button>
       <button id="closeSettings" class="btn ghost">Закрыть</button>
     </div>
-    <div class="hint small">Токен нужен только для записи. Не передавайте токен другим.</div>
+    <div class="hint small">Токен НЕ сохраняется локально — он используется в текущей сессии только в памяти.</div>
   </div>
 </div>
 
-<!-- New Idea Modal -->
-<div id="newModal" class="modal">
+<!-- New / Edit modal -->
+<div id="newModal" class="modal" aria-hidden="true">
   <div class="modal-card">
-    <h3>Добавить / Редактировать идею</h3>
+    <h3>Идея (добавить / редактировать)</h3>
     <label>Категория</label>
-    <select id="ideaCategory">
-      <option>Животные</option><option>Экология</option><option>Принты</option><option>Тренды</option><option>Спорт</option>
-    </select>
-    <label>Краткая тема</label>
-    <input id="ideaTitle" type="text" />
-    <label>Текст (ES)</label>
-    <textarea id="ideaTextES"></textarea>
-    <label>Текст (EN)</label>
-    <textarea id="ideaTextEN"></textarea>
-    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-      <label class="checkbox-inline"><input type="checkbox" id="forTikTok" /> TikTok</label>
-      <label class="checkbox-inline"><input type="checkbox" id="forIG" /> Instagram</label>
-      <label class="checkbox-inline"><input type="checkbox" id="forRB" /> RedBubble</label>
+    <select id="ideaCategory"><option>Животные</option><option>Экология</option><option>Принты</option><option>Тренды</option></select>
+    <label>Заголовок</label><input id="ideaTitle" type="text" />
+    <label>Текст (ES)</label><textarea id="ideaTextES"></textarea>
+    <label>Текст (EN)</label><textarea id="ideaTextEN"></textarea>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <label><input id="platTik" type="checkbox" checked/> TikTok</label>
+      <label><input id="platIG" type="checkbox" checked/> Instagram</label>
+      <label><input id="platRB" type="checkbox" /> RedBubble</label>
     </div>
     <div class="modal-actions">
       <button id="saveIdea" class="btn">Сохранить</button>
