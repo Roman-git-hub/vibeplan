@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2025-10-28T18:39:57.882Z"
+    "generated": "2025-10-28T18:47:49.406Z"
   },
   "items": [
     {
@@ -10,9 +10,9 @@
       "es": "Mi perro es mi familia — diseño divertido con huella",
       "en": "My dog is my family — cute paw design",
       "platforms": {
-        "tiktok": true,
-        "instagram": true,
-        "redbubble": false
+        "tiktok": false,
+        "instagram": false,
+        "redbubble": true
       },
       "published": false
     }
