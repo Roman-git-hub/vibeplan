@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>VibePlan — Online</title>
+<title>VibePlan — Stable</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,48 +11,51 @@
   <header class="header">
     <h1>VibePlan</h1>
     <div class="controls">
-      <button id="btnNew" class="btn">Добавить</button>
-      <button id="btnExport" class="btn ghost">Экспорт</button>
+      <button id="btnNew" class="btn">Добавить идею</button>
+      <button id="btnSync" class="btn accent">Синхронизировать</button>
+      <button id="btnExport" class="btn ghost">Экспорт TXT</button>
       <button id="btnSettings" class="btn ghost">Настройки</button>
-      <button id="btnForceSync" class="btn accent">Синхронизировать</button>
     </div>
   </header>
 
   <main>
     <section id="weekGrid" class="week"></section>
-    <div id="syncStatus" class="sync-status">Статус: не подключено</div>
+    <div id="syncStatus" class="sync-status">Статус: готов</div>
   </main>
 
-  <footer class="footer small">Интерфейс — русский. Данные хранятся ТОЛЬКО в GitHub (data.json).</footer>
+  <footer class="footer small">Интерфейс — русский. Синхронизация — вручную. Данные локально до нажатия «Синхронизировать».</footer>
 </div>
 
 <!-- Settings modal -->
 <div id="settingsModal" class="modal" aria-hidden="true">
   <div class="modal-card">
-    <h3>Настройки GitHub</h3>
+    <h3>Настройки синхронизации</h3>
     <label>Owner (username)</label>
-    <input id="inpOwner" type="text" value="Roman-git-hub" />
+    <input id="inpOwner" type="text" placeholder="GitHub username" />
     <label>Repo</label>
-    <input id="inpRepo" type="text" value="vibeplan" />
+    <input id="inpRepo" type="text" placeholder="repo name" />
     <label>File path</label>
     <input id="inpPath" type="text" value="data.json" />
     <label>Personal Access Token (PAT)</label>
-    <input id="inpToken" type="password" placeholder="вставьте токен (ghp_...)" />
+    <input id="inpToken" type="password" placeholder="ghp_..." />
     <div class="modal-actions">
-      <button id="saveSettings" class="btn">Подключить</button>
+      <button id="saveSettings" class="btn">Сохранить</button>
       <button id="closeSettings" class="btn ghost">Закрыть</button>
     </div>
-    <div class="hint small">Токен НЕ сохраняется локально — он используется в текущей сессии только в памяти.</div>
+    <div class="hint small">Токен хранится локально и нужен только для синхронизации.</div>
   </div>
 </div>
 
-<!-- New / Edit modal -->
+<!-- New Idea Modal -->
 <div id="newModal" class="modal" aria-hidden="true">
   <div class="modal-card">
-    <h3>Идея (добавить / редактировать)</h3>
+    <h3>Новая идея</h3>
+    <label>День</label>
+    <select id="ideaDay"><option>Пн</option><option>Вт</option><option>Ср</option><option>Чт</option><option>Пт</option><option>Сб</option><option>Вс</option></select>
     <label>Категория</label>
-    <select id="ideaCategory"><option>Животные</option><option>Экология</option><option>Принты</option><option>Тренды</option></select>
-    <label>Заголовок</label><input id="ideaTitle" type="text" />
+    <input id="ideaCategory" type="text" value="Животные" />
+    <label>Заголовок</label>
+    <input id="ideaTitle" type="text" />
     <label>Текст (ES)</label><textarea id="ideaTextES"></textarea>
     <label>Текст (EN)</label><textarea id="ideaTextEN"></textarea>
     <div style="display:flex;gap:8px;margin-top:8px">
