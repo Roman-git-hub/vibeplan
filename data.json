@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2025-10-25T14:29:13.158Z"
+    "generated": "2025-10-28T18:39:02.650Z"
   },
   "items": [
     {
@@ -11,8 +11,8 @@
       "en": "My dog is my family — cute paw design",
       "platforms": {
         "tiktok": true,
-        "instagram": false,
-        "redbubble": false
+        "instagram": true,
+        "redbubble": true
       },
       "published": false
     }
