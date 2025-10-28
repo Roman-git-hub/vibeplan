@@ -15,6 +15,19 @@
         "redbubble": true
       },
       "published": false
+    },
+    {
+      "day": "Вт",
+      "category": "Экология",
+      "title": "Cute dog tshirt",
+      "es": "",
+      "en": "",
+      "platforms": {
+        "tiktok": true,
+        "instagram": true,
+        "redbubble": true
+      },
+      "published": false
     }
   ]
 }
