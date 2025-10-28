@@ -46,7 +46,7 @@ function init(){ // UI handlers
   // initial
   state = sample(); render(); updateStatus('Ожидает подключения — открой Настройки и вставь PAT'); // no persistent token by design
   window.addEventListener('beforeunload', ()=>{ if(CONFIG.token){ // best-effort: try to save
-    try{ navigator.sendBeacon && navigator.sendBeacon(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`, JSON.stringify(state)); }catch(e){} } });
+    try{ navigator.sendBeacon }catch(e){} } });
 }
 
 document.addEventListener('DOMContentLoaded', init);
