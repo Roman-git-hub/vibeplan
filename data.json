@@ -12,7 +12,7 @@
       "platforms": {
         "tiktok": true,
         "instagram": true,
-        "redbubble": false
+        "redbubble": true
       },
       "published": false
     }
