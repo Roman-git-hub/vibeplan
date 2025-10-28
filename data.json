@@ -41,6 +41,19 @@
         "redbubble": true
       },
       "published": false
+    },
+    {
+      "day": "Вт",
+      "category": "Животные",
+      "title": "Без названия",
+      "es": "",
+      "en": "",
+      "platforms": {
+        "tiktok": true,
+        "instagram": true,
+        "redbubble": true
+      },
+      "published": false
     }
   ]
 }
