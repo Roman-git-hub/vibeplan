@@ -11,7 +11,7 @@
       "en": "My dog is my family",
       "platforms": {
         "tiktok": true,
-        "instagram": true,
+        "instagram": false,
         "redbubble": true
       },
       "published": false
