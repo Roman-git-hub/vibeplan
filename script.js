@@ -61,16 +61,7 @@ function render(){
 
         const actions = document.createElement('div'); actions.className='idea-actions';
         const edit = document.createElement('button'); edit.textContent='Изменить'; edit.onclick = ()=>openEdit(p);
-const del = document.createElement('button');
-del.textContent = 'Del';
-del.onclick = () => {
-  const i = state.items.indexOf(p);
-  if (i > -1) state.items.splice(i, 1);
-  saveToStorage();
-  render();
-};
-
-
+        const del = document.createElement('button'); del.textContent='Удалить'; del.onclick = ()=>{ if(confirm('Удалить?')){ const i = state.items.indexOf(p); if(i>-1) state.items.splice(i,1); saveToStorage(); render(); } };
 
         actions.appendChild(edit); actions.appendChild(del);
         c.appendChild(plats);
