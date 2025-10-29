@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VibePlan — Stable</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>VibePlan</h1>
+    <div class="controls">
+      <button id="btnNew" class="btn">Добавить идею</button>
+      <button id="btnSync" class="btn accent">Синхронизировать</button>
+      <button id="btnExport" class="btn ghost">Экспорт TXT</button>
+      <button id="btnSettings" class="btn ghost">Настройки</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="weekGrid" class="week"></section>
+    <div id="syncStatus" class="sync-status">Статус: готов</div>
+  </main>
+
+  <footer class="footer small">Интерфейс — русский. Синхронизация — вручную. Данные локально до нажатия «Синхронизировать».</footer>
+</div>
+
+<!-- Settings modal -->
+<div id="settingsModal" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <h3>Настройки синхронизации</h3>
+    <label for="inpOwner">Owner (username)</label>
+    <input id="inpOwner" type="text" placeholder="GitHub username" />
+    <label for="inpRepo">Repo</label>
+    <input id="inpRepo" type="text" placeholder="repo name" />
+    <label for="inpPath">File path</label>
+    <input id="inpPath" type="text" value="data.json" />
+    <label for="inpToken">Personal Access Token (PAT)</label>
+    <input id="inpToken" type="password" placeholder="ghp_..." />
+    <div class="modal-actions">
+      <button id="saveSettings" class="btn">Сохранить</button>
+      <button id="closeSettings" class="btn ghost">Закрыть</button>
+    </div>
+    <div class="hint small">Токен хранится локально и нужен только для синхронизации.</div>
+  </div>
+</div>
+
+<!-- New Idea Modal (fixed) -->
+<div id="newModal" class="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="newModalTitle">
+    <h3 id="newModalTitle">Новая идея</h3>
+
+    <label for="ideaDay">День</label>
+    <select id="ideaDay" name="ideaDay">
+      <option>Пн</option><option>Вт</option><option>Ср</option><option>Чт</option><option>Пт</option><option>Сб</option><option>Вс</option>
+    </select>
+
+    <label for="ideaCategory">Категория</label>
+    <input id="ideaCategory" name="ideaCategory" type="text" value="Животные" />
+
+    <label for="ideaTitle">Заголовок</label>
+    <input id="ideaTitle" name="ideaTitle" type="text" />
+
+    <label for="ideaTextES">Текст (ES)</label>
+    <textarea id="ideaTextES" name="ideaTextES" rows="3"></textarea>
+
+    <label for="ideaTextEN">Текст (EN)</label>
+    <textarea id="ideaTextEN" name="ideaTextEN" rows="3"></textarea>
+
+    <div class="idea-platforms" aria-label="Платформы">
+      <label for="platTik"><input id="platTik" name="platTik" type="checkbox" /> TikTok</label>
+      <label for="platIG"><input id="platIG" name="platIG" type="checkbox" /> Instagram</label>
+      <label for="platRB"><input id="platRB" name="platRB" type="checkbox" /> RedBubble</label>
+    </div>
+
+    <div class="modal-actions">
+      <button id="saveIdea" class="btn">Сохранить</button>
+      <button id="closeNew" class="btn ghost">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
