@@ -41,6 +41,32 @@
         "redbubble": true
       },
       "published": false
+    },
+    {
+      "day": "Вт",
+      "category": "Животные",
+      "title": "Без названия 591",
+      "es": "",
+      "en": "",
+      "platforms": {
+        "tiktok": false,
+        "instagram": false,
+        "redbubble": false
+      },
+      "published": false
+    },
+    {
+      "day": "Ср",
+      "category": "Животные",
+      "title": "Без названия 471",
+      "es": "",
+      "en": "",
+      "platforms": {
+        "tiktok": false,
+        "instagram": true,
+        "redbubble": false
+      },
+      "published": false
     }
   ]
 }
