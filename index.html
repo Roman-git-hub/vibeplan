@@ -30,13 +30,13 @@
 <div id="settingsModal" class="modal" aria-hidden="true">
   <div class="modal-card">
     <h3>Настройки синхронизации</h3>
-    <label>Owner (username)</label>
+    <label for="inpOwner">Owner (username)</label>
     <input id="inpOwner" type="text" placeholder="GitHub username" />
-    <label>Repo</label>
+    <label for="inpRepo">Repo</label>
     <input id="inpRepo" type="text" placeholder="repo name" />
-    <label>File path</label>
+    <label for="inpPath">File path</label>
     <input id="inpPath" type="text" value="data.json" />
-    <label>Personal Access Token (PAT)</label>
+    <label for="inpToken">Personal Access Token (PAT)</label>
     <input id="inpToken" type="password" placeholder="ghp_..." />
     <div class="modal-actions">
       <button id="saveSettings" class="btn">Сохранить</button>
@@ -46,23 +46,34 @@
   </div>
 </div>
 
-<!-- New Idea Modal -->
+<!-- New Idea Modal (fixed) -->
 <div id="newModal" class="modal" aria-hidden="true">
-  <div class="modal-card">
-    <h3>Новая идея</h3>
-    <label>День</label>
-    <select id="ideaDay"><option>Пн</option><option>Вт</option><option>Ср</option><option>Чт</option><option>Пт</option><option>Сб</option><option>Вс</option></select>
-    <label>Категория</label>
-    <input id="ideaCategory" type="text" value="Животные" />
-    <label>Заголовок</label>
-    <input id="ideaTitle" type="text" />
-    <label>Текст (ES)</label><textarea id="ideaTextES"></textarea>
-    <label>Текст (EN)</label><textarea id="ideaTextEN"></textarea>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <label><input id="platTik" type="checkbox" checked/> TikTok</label>
-      <label><input id="platIG" type="checkbox" checked/> Instagram</label>
-      <label><input id="platRB" type="checkbox" /> RedBubble</label>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="newModalTitle">
+    <h3 id="newModalTitle">Новая идея</h3>
+
+    <label for="ideaDay">День</label>
+    <select id="ideaDay" name="ideaDay">
+      <option>Пн</option><option>Вт</option><option>Ср</option><option>Чт</option><option>Пт</option><option>Сб</option><option>Вс</option>
+    </select>
+
+    <label for="ideaCategory">Категория</label>
+    <input id="ideaCategory" name="ideaCategory" type="text" value="Животные" />
+
+    <label for="ideaTitle">Заголовок</label>
+    <input id="ideaTitle" name="ideaTitle" type="text" />
+
+    <label for="ideaTextES">Текст (ES)</label>
+    <textarea id="ideaTextES" name="ideaTextES" rows="3"></textarea>
+
+    <label for="ideaTextEN">Текст (EN)</label>
+    <textarea id="ideaTextEN" name="ideaTextEN" rows="3"></textarea>
+
+    <div class="idea-platforms" aria-label="Платформы">
+      <label for="platTik"><input id="platTik" name="platTik" type="checkbox" /> TikTok</label>
+      <label for="platIG"><input id="platIG" name="platIG" type="checkbox" /> Instagram</label>
+      <label for="platRB"><input id="platRB" name="platRB" type="checkbox" /> RedBubble</label>
     </div>
+
     <div class="modal-actions">
       <button id="saveIdea" class="btn">Сохранить</button>
       <button id="closeNew" class="btn ghost">Отмена</button>
