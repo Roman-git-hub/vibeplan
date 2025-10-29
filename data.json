@@ -10,7 +10,7 @@
       "es": "Mi perro es mi familia",
       "en": "My dog is my family",
       "platforms": {
-        "tiktok": true,
+        "tiktok": false,
         "instagram": false,
         "redbubble": true
       },
