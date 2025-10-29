@@ -10,9 +10,9 @@
       "es": "Mi perro es mi familia",
       "en": "My dog is my family",
       "platforms": {
-        "tiktok": true,
-        "instagram": true,
-        "redbubble": true
+        "tiktok": false,
+        "instagram": false,
+        "redbubble": false
       },
       "published": false
     },
@@ -22,6 +22,19 @@
       "title": "Cute dog tshirt2",
       "es": "kypes",
       "en": "qwrqfrqef",
+      "platforms": {
+        "tiktok": true,
+        "instagram": true,
+        "redbubble": true
+      },
+      "published": false
+    },
+    {
+      "day": "Ср",
+      "category": "Животные",
+      "title": "Cute dog tshirt3",
+      "es": "qwertyu",
+      "en": "qazxxswedcfv",
       "platforms": {
         "tiktok": true,
         "instagram": true,
