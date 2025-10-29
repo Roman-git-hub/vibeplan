@@ -1,7 +1,4 @@
-// VibePlan stable build
-// Local storage used to keep data locally until user presses "Синхронизировать".
-// Settings saved to localStorage for convenience and can be changed in Settings modal.
-
+// VibePlan stable build - full project script
 const STORAGE_KEY = 'vibeplan_data_v1';
 const SETTINGS_KEY = 'vibeplan_settings_v1';
 
@@ -11,15 +8,10 @@ let state = { meta: { generated: new Date().toISOString() }, items: [] };
 function $(id){ return document.getElementById(id); }
 
 function loadFromStorage(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){ state = JSON.parse(raw); }
-  }catch(e){ console.error('load local err', e); }
+  try{ const raw = localStorage.getItem(STORAGE_KEY); if(raw){ state = JSON.parse(raw); } }catch(e){ console.error('load local err', e); }
 }
 
-function saveToStorage(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
-}
+function saveToStorage(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
 
 function loadSettings(){
   try{
@@ -41,11 +33,9 @@ function saveSettings(){
   updateStatus('Настройки сохранены локально');
 }
 
-function sampleData(){
-  return { meta:{generated:new Date().toISOString()}, items:[ { day:'Пн', category:'Животные', title:'Cute dog tshirt', es:'Mi perro es mi familia', en:'My dog is my family', platforms:{tiktok:true,instagram:true,redbubble:false}, published:false } ] };
-}
+function sampleData(){ return { meta:{generated:new Date().toISOString()}, items:[ { day:'Пн', category:'Животные', title:'Cute dog tshirt', es:'Mi perro es mi familia', en:'My dog is my family', platforms:{tiktok:true,instagram:true,redbubble:false}, published:false } ] }; }
 
-function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>"']/g, function(c){ return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' })[c]; }); }
+function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>"']/g, function(c){ return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]; }); }
 
 function render(){
   const week = $('weekGrid'); week.innerHTML='';
@@ -60,14 +50,23 @@ function render(){
       posts.forEach((p, idx)=>{
         const c = document.createElement('div'); c.className='idea-card';
         c.innerHTML = `<h4>${escapeHtml(p.title)}</h4><div class='small'><em>ES:</em> ${escapeHtml(p.es)}<br><em>EN:</em> ${escapeHtml(p.en)}</div>`;
-        const meta = document.createElement('div'); meta.className='idea-actions';
-        const cbTik = document.createElement('label'); cbTik.innerHTML = `<input type="checkbox" data-idx="${idx}" data-id="${encodeURIComponent(p.title)}" data-plat="tiktok" ${p.platforms.tiktok? 'checked':''}/> TikTok`;
-        const cbIG = document.createElement('label'); cbIG.innerHTML = `<input type="checkbox" data-idx="${idx}" data-id="${encodeURIComponent(p.title)}" data-plat="instagram" ${p.platforms.instagram? 'checked':''}/> IG`;
-        const cbRB = document.createElement('label'); cbRB.innerHTML = `<input type="checkbox" data-idx="${idx}" data-id="${encodeURIComponent(p.title)}" data-plat="redbubble" ${p.platforms.redbubble? 'checked':''}/> RB`;
-        const edit = document.createElement('button'); edit.textContent='Ред'; edit.onclick=()=>openEdit(p);
-        const del = document.createElement('button'); del.textContent='Del'; del.onclick=()=>{ if(confirm('Удалить?')){ const i = state.items.indexOf(p); if(i>-1) state.items.splice(i,1); saveToStorage(); render(); } };
-        meta.appendChild(cbTik); meta.appendChild(cbIG); meta.appendChild(cbRB); meta.appendChild(edit); meta.appendChild(del);
-        c.appendChild(meta); col.appendChild(c);
+
+        const plats = document.createElement('div');
+        plats.className = 'idea-platforms';
+        plats.innerHTML = `
+          <label><input type="checkbox" data-idx="${idx}" data-id="${encodeURIComponent(p.title)}" data-plat="tiktok" ${p.platforms.tiktok? 'checked':''}/> TikTok</label>
+          <label><input type="checkbox" data-idx="${idx}" data-id="${encodeURIComponent(p.title)}" data-plat="instagram" ${p.platforms.instagram? 'checked':''}/> Instagram</label>
+          <label><input type="checkbox" data-idx="${idx}" data-id="${encodeURIComponent(p.title)}" data-plat="redbubble" ${p.platforms.redbubble? 'checked':''}/> RedBubble</label>
+        `;
+
+        const actions = document.createElement('div'); actions.className='idea-actions';
+        const edit = document.createElement('button'); edit.textContent='Изменить'; edit.onclick = ()=>openEdit(p);
+        const del = document.createElement('button'); del.textContent='Удалить'; del.onclick = ()=>{ if(confirm('Удалить?')){ const i = state.items.indexOf(p); if(i>-1) state.items.splice(i,1); saveToStorage(); render(); } };
+
+        actions.appendChild(edit); actions.appendChild(del);
+        c.appendChild(plats);
+        c.appendChild(actions);
+        col.appendChild(c);
       });
     }
     week.appendChild(col);
@@ -76,12 +75,16 @@ function render(){
 }
 
 function bindCheckboxes(){
-  document.querySelectorAll('.idea-actions input[type=\"checkbox\"]').forEach(cb=>{
+  document.querySelectorAll('.idea-platforms input[type="checkbox"]').forEach(cb=>{
     cb.onchange = (e)=>{
       const title = decodeURIComponent(e.target.dataset.id);
       const plat = e.target.dataset.plat;
-      const item = state.items.find(x=>x.title===title);
-      if(item){ item.platforms[plat] = e.target.checked; saveToStorage(); updateStatus('Изменения локально сохранены'); }
+      const idx = parseInt(e.target.dataset.idx,10);
+      if(!isNaN(idx) && state.items[idx]){
+        state.items[idx].platforms[plat] = e.target.checked;
+        saveToStorage();
+        updateStatus('Изменения локально сохранены');
+      }
     };
   });
 }
@@ -128,12 +131,12 @@ function exportTXT(){
   let out='';
   const days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
   for(const d of days){
-    out+=d+'\\n';
+    out+=d+'\n';
     const posts = state.items.filter(x=>x.day===d);
     for(const p of posts){
-      out+=`- ${p.title} | ES:${p.es} | EN:${p.en} | T:${p.platforms.tiktok?1:0} I:${p.platforms.instagram?1:0} R:${p.platforms.redbubble?1:0}\\n`;
+      out+=`- ${p.title} | ES:${p.es} | EN:${p.en} | T:${p.platforms.tiktok?1:0} I:${p.platforms.instagram?1:0} R:${p.platforms.redbubble?1:0}\n`;
     }
-    out+='\\n';
+    out+='\n';
   }
   const blob = new Blob([out],{type:'text/plain'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'vibeplan.txt'; a.click();
@@ -153,7 +156,7 @@ async function fetchRemote(){
     try{ const parsed = JSON.parse(raw); state = parsed; saveToStorage(); render(); updateStatus('Данные загружены'); return j.sha; }
     catch(e){ updateStatus('Ошибка разбора JSON'); throw e; }
   } else if(r.status===404){
-    updateStatus('Файл не найден — будет создан при синхронизации');
+    updateStatus('Файл не найден — будет создан при синхронизацией');
     return null;
   } else {
     const t = await r.text();
@@ -165,13 +168,11 @@ async function fetchRemote(){
 async function pushRemote(){
   updateStatus('Отправка на GitHub...');
   const api = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
-  // get current sha if exists
   let sha = null;
   try{
     const g = await fetch(api, { headers: ghHeaders() });
     if(g.ok){ const gj = await g.json(); sha = gj.sha; }
   }catch(e){ console.warn('get sha failed', e); }
-  // prepare content (UTF-8 safe)
   const json = JSON.stringify(state, null, 2);
   const content = btoa(unescape(encodeURIComponent(json)));
   const body = { message: 'VibePlan: update', content: content, committer: { name: CONFIG.owner || 'user', email: CONFIG.owner ? CONFIG.owner + '@users.noreply.github.com' : 'no-reply' } };
@@ -180,17 +181,14 @@ async function pushRemote(){
   if(res.ok){ updateStatus('✅ Синхронизация успешна'); return true; } else { const t = await res.text(); updateStatus('Ошибка записи: '+res.status); console.error('push err', t); return false; }
 }
 
-// helpers
 function updateStatus(t){ $('syncStatus').textContent = 'Статус: ' + t; }
 
-// init
 function init(){
   loadSettings(); loadFromStorage();
   if(!state || !state.items || !state.items.length) state = sampleData();
   render();
-  // UI hooks
   $('btnNew').onclick = addNew;
-  $('btnSync').onclick = async ()=>{ if(!CONFIG.token || !CONFIG.owner || !CONFIG.repo){ if(!confirm('Настройки не заполнены. Открыть настройки?')) return; showModal('settingsModal'); return; } try{ const ok = await pushRemote(); if(ok) { /* nothing */ } }catch(e){ alert('Ошибка синхронизации: '+e.message); } };
+  $('btnSync').onclick = async ()=>{ if(!CONFIG.token || !CONFIG.owner || !CONFIG.repo){ if(!confirm('Настройки не заполнены. Открыть настройки?')) return; showModal('settingsModal'); return; } try{ const ok = await pushRemote(); if(ok){} }catch(e){ alert('Ошибка синхронизации: '+e.message); } };
   $('btnExport').onclick = exportTXT;
   $('btnSettings').onclick = ()=>showModal('settingsModal');
   $('saveSettings').onclick = ()=>{ saveSettings(); hideModal('settingsModal'); };
@@ -198,7 +196,6 @@ function init(){
   $('saveIdea').onclick = saveIdea;
   $('closeNew').onclick = ()=>hideModal('newModal');
   updateStatus('Готово');
-  // autosave on beforeunload (best-effort local save already happens)
   window.addEventListener('beforeunload', ()=>{ saveToStorage(); });
 }
 
