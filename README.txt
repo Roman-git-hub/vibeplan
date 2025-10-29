@@ -1,0 +1,2 @@
+VibePlan — Online sync ready for Roman-git-hub/vibeplan
+Instructions:\n1) Upload these files to your repo (or GitHub Pages).\n2) Open site, Settings -> fill owner/repo/path/token -> Save -> click 'Загрузить' to pull data or 'Синхронизировать' to push local data.\nToken stored locally in browser.\n
