@@ -1,6 +1,20 @@
 {
   "meta": {
-    "generated": "2025-10-29T19:50:54.498555Z"
+    "generated": "2025-10-29T22:36:26.231Z"
   },
-  "items": []
+  "items": [
+    {
+      "day": "Пн",
+      "category": "Животные",
+      "title": "Cute dog tshirt",
+      "es": "Mi perro es mi familia",
+      "en": "My dog is my family",
+      "platforms": {
+        "tiktok": true,
+        "instagram": true,
+        "redbubble": false
+      },
+      "published": false
+    }
+  ]
 }
