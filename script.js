@@ -1,145 +1,77 @@
-// === НАСТРОЙКИ ===
-const username = "Roman-git-hub";
-const repo = "vibeplan";
-const filename = "data.json";
-const token = localStorage.getItem("github_token") || ""; // можно один раз ввести и сохранить
 
-// === ФУНКЦИИ РАБОТЫ С ДАННЫМИ ===
+// main.js — полная версия с синхронизацией с GitHub Gist
 
-async function loadData() {
-  try {
-    const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${filename}`, {
-      headers: { Authorization: `token ${token}` }
-    });
+const GIST_ID = "ВАШ_GIST_ID";
+const GIST_TOKEN = "ВАШ_GITHUB_TOKEN";
+const FILE_NAME = "data.json";
 
-    if (!response.ok) throw new Error("Не удалось загрузить data.json");
-
-    const json = await response.json();
-    const content = JSON.parse(atob(json.content));
-
-    // Приводим структуру к единому виду
-    for (const date in content) {
-      if (Array.isArray(content[date])) {
-        content[date] = { ideas: content[date] };
-      } else if (!content[date].ideas) {
-        content[date].ideas = [];
-      }
+async function loadFromGist() {
+    try {
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            headers: { Authorization: `token ${GIST_TOKEN}` }
+        });
+        const gist = await response.json();
+        const content = gist.files[FILE_NAME]?.content;
+        if (content) {
+            localStorage.setItem("plannerData", content);
+            render();
+        }
+    } catch (err) {
+        console.error("Ошибка загрузки данных:", err);
     }
-
-    localStorage.setItem("ideas", JSON.stringify(content));
-    render();
-    console.log("✅ Данные успешно загружены");
-  } catch (err) {
-    console.error("Ошибка загрузки данных:", err);
-  }
 }
 
-async function saveData() {
-  try {
-    const content = JSON.parse(localStorage.getItem("ideas") || "{}");
-
-    // Убедимся, что у каждой даты есть объект ideas
-    for (const date in content) {
-      if (!content[date].ideas) content[date] = { ideas: [] };
+async function saveToGist() {
+    try {
+        const data = localStorage.getItem("plannerData") || "{}";
+        await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            method: "PATCH",
+            headers: {
+                Authorization: `token ${GIST_TOKEN}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                files: { [FILE_NAME]: { content: data } }
+            }),
+        });
+        alert("✅ Синхронизировано с GitHub!");
+    } catch (err) {
+        console.error("Ошибка синхронизации:", err);
     }
-
-    const base64 = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
-
-    const getResp = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${filename}`, {
-      headers: { Authorization: `token ${token}` }
-    });
-    const fileData = await getResp.json();
-
-    const putResp = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${filename}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: "Sync data.json from app",
-        content: base64,
-        sha: fileData.sha
-      })
-    });
-
-    if (!putResp.ok) throw new Error("Ошибка при сохранении на GitHub");
-
-    console.log("✅ Данные синхронизированы с GitHub");
-  } catch (err) {
-    console.error("Ошибка синхронизации:", err);
-  }
 }
-
-// === UI ===
 
 function render() {
-  const container = document.getElementById("ideasContainer");
-  const data = JSON.parse(localStorage.getItem("ideas") || "{}");
-  const today = new Date().toISOString().split("T")[0];
+    const container = document.getElementById("days");
+    const data = JSON.parse(localStorage.getItem("plannerData") || "{}");
+    container.innerHTML = "";
 
-  container.innerHTML = "";
+    Object.keys(data).forEach(day => {
+        const div = document.createElement("div");
+        div.className = "day";
+        div.innerHTML = `<h3>${day}</h3>`;
 
-  const section = document.createElement("div");
-  section.className = "day-section";
+        data[day].forEach((task, i) => {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = task.done;
+            checkbox.onchange = () => {
+                task.done = checkbox.checked;
+                localStorage.setItem("plannerData", JSON.stringify(data));
+            };
 
-  const title = document.createElement("h2");
-  title.textContent = today;
-  section.appendChild(title);
+            const label = document.createElement("label");
+            label.textContent = task.text;
 
-  const addBtn = document.createElement("button");
-  addBtn.textContent = "➕ Добавить идею";
-  addBtn.onclick = () => addIdea(today);
-  section.appendChild(addBtn);
+            div.appendChild(checkbox);
+            div.appendChild(label);
+            div.appendChild(document.createElement("br"));
+        });
 
-  const list = document.createElement("div");
-  list.className = "ideas-list";
-
-  const dayData = data[today]?.ideas || [];
-  dayData.forEach((idea, i) => {
-    const item = document.createElement("div");
-    item.className = "idea-item";
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = idea.checked;
-    checkbox.onchange = () => {
-      idea.checked = checkbox.checked;
-      data[today].ideas = dayData;
-      localStorage.setItem("ideas", JSON.stringify(data));
-      saveData();
-    };
-
-    const text = document.createElement("span");
-    text.textContent = idea.text;
-    if (idea.checked) text.style.textDecoration = "line-through";
-
-    item.appendChild(checkbox);
-    item.appendChild(text);
-    list.appendChild(item);
-  });
-
-  section.appendChild(list);
-  container.appendChild(section);
+        container.appendChild(div);
+    });
 }
 
-function addIdea(date) {
-  const text = prompt("Введите текст идеи:");
-  if (!text) return;
+document.getElementById("syncBtn").addEventListener("click", saveToGist);
+document.getElementById("loadBtn").addEventListener("click", loadFromGist);
 
-  const data = JSON.parse(localStorage.getItem("ideas") || "{}");
-  if (!data[date]) data[date] = { ideas: [] };
-
-  data[date].ideas.push({ text, checked: false });
-  localStorage.setItem("ideas", JSON.stringify(data));
-  render();
-  saveData();
-}
-
-// === КНОПКИ ===
-
-document.getElementById("btnSync").addEventListener("click", saveData);
-document.getElementById("btnLoad").addEventListener("click", loadData);
-
-// === ПЕРВОНАЧАЛЬНАЯ ОТРИСОВКА ===
-window.addEventListener("DOMContentLoaded", render);
+render();
